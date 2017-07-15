@@ -6,6 +6,9 @@ You must have installed go1.8
 # Usage
 
 `git clone https://github.com/Fomchenkov/go-linux-spy`
+
 `cd go-linux-spy`
+
 `go build`
+
 `./go-linux-spy &`
